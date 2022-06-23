@@ -1,17 +1,11 @@
 import { db } from "./firebase";
-import { set, ref, onValue, remove, update } from "firebase/database";
+import {ref, onValue, remove } from "firebase/database";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function App() {
-  const [order, setOrder] = useState("");
   const [orderArray, setOrderArray] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
-  const [tempId, setTempId] = useState("");
   const [showStatus, setShowstatus] = useState("");
-  const handleOrderChange = (e) => {
-    setOrder(e.target.value);
-  };
 
   //read
   useEffect(() => {
@@ -48,35 +42,7 @@ export default function App() {
     }
   }
 
-  // //write
-  // const writeToDatabase = () => {
-  //     const id = uid();
-  //     set(ref(db, `/${id}`), {
-  //         order: order,
-  //         id,
-  //     });
-
-  //     setOrder("");
-  // };
-
-  //update
-  const handleUpdate = (order) => {
-    setIsEdit(true);
-    setTempId(order.id);
-    setOrder(order.order);
-  };
-
-  const handleSubmitChange = () => {
-    update(ref(db, `/${tempId}`), {
-      order: order,
-      id: tempId,
-    });
-
-    setOrder("");
-    setIsEdit(false);
-  };
-
-  //delete
+  //todo:delete order in database
   const handleDelete = (order) => {
     remove(ref(db, `/${order.id}`));
   };
@@ -129,13 +95,11 @@ export default function App() {
                   <button
                     className="py-2 px-5 bg-green-500 hover:bg-green-400 text-white rounded-lg mt-2 mr-10"
                     onClick={() => { finishedOrder(order.id, order.order); toggleShowStatus(); }}
-                  //onClick={toggleShowStatus}
                   >
                     เสร็จแล้ว
                   </button>
                   <button
                     className="py-2 px-5 bg-red-600 hover:bg-red-400 text-white rounded-lg mr-10"
-                    //onClick={toggleShowStatus}
                     onClick={() => { rejectOrder(order.id, order.order); toggleShowStatus(); }}
                   >
                     ไม่มีเมนูนี้
