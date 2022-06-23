@@ -128,15 +128,15 @@ export default function App() {
                 <td className="font-medium ">
                   <button
                     className="py-2 px-5 bg-green-500 hover:bg-green-400 text-white rounded-lg mt-2 mr-10"
-                    onClick={() => finishedOrder(order.id, order.order)}
-                    //onClick={toggleShowStatus}
+                    onClick={() => { finishedOrder(order.id, order.order); toggleShowStatus(); }}
+                  //onClick={toggleShowStatus}
                   >
                     เสร็จแล้ว
                   </button>
                   <button
                     className="py-2 px-5 bg-red-600 hover:bg-red-400 text-white rounded-lg mr-10"
                     //onClick={toggleShowStatus}
-                    onClick={() => rejectOrder(order.id, order.order)}
+                    onClick={() => { rejectOrder(order.id, order.order); toggleShowStatus(); }}
                   >
                     ไม่มีเมนูนี้
                   </button>
@@ -144,12 +144,11 @@ export default function App() {
                 <td className="font-medium ">
                   <div className="show-status">
                     {showStatus === false ? (
-                      <span className="bg-green-200 text-green-900  rounded-md px-2">
-                        เสร็จแล้ว
+                      <span className="bg-white rounded-md px-2">
                       </span>
                     ) : (
-                      <span className="bg-red-200 text-red-900 rounded-md px-2">
-                        ยกเลิกแล้ว
+                      <span className="bg-green-200 text-green-900  rounded-md px-2">
+                        เสร็จแล้ว
                       </span>
                     )}
                   </div>
