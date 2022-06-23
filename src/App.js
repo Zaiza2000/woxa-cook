@@ -1,11 +1,10 @@
 import { db } from "./firebase";
-import {ref, onValue, remove } from "firebase/database";
+import { ref, onValue, remove } from "firebase/database";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function App() {
   const [orderArray, setOrderArray] = useState([]);
-  const [showStatus, setShowstatus] = useState("");
 
   //read
   useEffect(() => {
@@ -31,12 +30,13 @@ export default function App() {
     }
   }
 
-  async function rejectOrder(userId, order) {
+  async function rejectOrder(userId, order, time) {
     try {
       await axios.post("https://woxa-food-order.herokuapp.com/reject-order", {
         id: userId,
         order: order,
       });
+      handleDelete(time);
     } catch (err) {
       console.log(err);
     }
@@ -44,21 +44,17 @@ export default function App() {
 
   //todo:delete order in database
   const handleDelete = (order) => {
-    remove(ref(db, `/${order.id}`));
+    remove(ref(db, `/${order}`));
   };
 
   //No.
   var orderNo = 0;
 
-  //showstatus
-  const toggleShowStatus = () => {
-    setShowstatus(!showStatus);
-  };
   return (
     <section className="overflow-x-auto">
       <h1 className="m-10 text-lg text-center font-bold">WOXA KITCHEN</h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-500 ">
+        <table className="w-full text-sm text-center text-gray-500 ">
           <thead className="text-sm text-white uppercase bg-gray-800">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -72,9 +68,6 @@ export default function App() {
               </th>
               <th scope="col" className="px-6 py-3">
                 ตรวจสอบ
-              </th>
-              <th scope="col" className="px-6 py-3">
-                สถานะ
               </th>
             </tr>
           </thead>
@@ -94,28 +87,20 @@ export default function App() {
                 <td className="font-medium ">
                   <button
                     className="py-2 px-5 bg-green-500 hover:bg-green-400 text-white rounded-lg mt-2 mr-10"
-                    onClick={() => { finishedOrder(order.id, order.order); toggleShowStatus(); }}
+                    onClick={() => {
+                      finishedOrder(order.id, order.order);
+                    }}
                   >
                     เสร็จแล้ว
                   </button>
                   <button
                     className="py-2 px-5 bg-red-600 hover:bg-red-400 text-white rounded-lg mr-10"
-                    onClick={() => { rejectOrder(order.id, order.order); toggleShowStatus(); }}
+                    onClick={() => {
+                      rejectOrder(order.id, order.order, order.time);
+                    }}
                   >
                     ไม่มีเมนูนี้
                   </button>
-                </td>
-                <td className="font-medium ">
-                  <div className="show-status">
-                    {showStatus === false ? (
-                      <span className="bg-white rounded-md px-2">
-                      </span>
-                    ) : (
-                      <span className="bg-green-200 text-green-900  rounded-md px-2">
-                        เสร็จแล้ว
-                      </span>
-                    )}
-                  </div>
                 </td>
               </tr>
             ))}
