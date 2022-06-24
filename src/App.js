@@ -12,6 +12,7 @@ export default function App() {
       setOrderArray([]);
       const data = snapshot.val();
       if (data !== null) {
+        // eslint-disable-next-line array-callback-return
         Object.values(data).map((order) => {
           setOrderArray((oldArray) => [...oldArray, order]);
         });
@@ -103,6 +104,7 @@ export default function App() {
                   </button>
 
                 </td>
+
               </tr>
             ))}
           </tbody>
